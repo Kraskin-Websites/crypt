@@ -1,14 +1,5 @@
 /* Estilos gerais */
 /* Estilos gerais */
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; /* Garante que a altura mínima seja 100% da altura da viewport */
-    margin: 15px;
-    padding: 15px;
-    overflow-x: hidden; /* Remove a rolagem horizontal */
-  }
   
   .schedule-container {
     width: 100%;
@@ -36,9 +27,13 @@ body {
 
 
 body {
-
-
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Garante que a altura mínima seja 100% da altura da viewport */
+    margin: 15px;
+    padding: 15px;
+    overflow-x: hidden; /* Remove a rolagem horizontal */
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 2px;
