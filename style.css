@@ -1,6 +1,44 @@
 /* Estilos gerais */
 /* Estilos gerais */
 body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Garante que a altura mínima seja 100% da altura da viewport */
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Remove a rolagem horizontal */
+  }
+  
+  .schedule-container {
+    width: 100%;
+    max-width: 560px; /* Garantir que a escala não ultrapasse o tamanho da tela */
+    padding: 0; /* Remover qualquer padding extra que possa causar rolagem horizontal */
+  }
+  
+  .schedule-row {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os elementos dentro da linha se ajustem em várias linhas, se necessário */
+    justify-content: center; /* Centraliza os elementos dentro da linha */
+  }
+  
+  .schedule-header, .schedule-cell {
+    flex: 1 0 100px; /* Garante que os elementos tenham largura mínima e se ajustem ao tamanho disponível */
+    text-align: center; /* Centraliza o texto */
+  }
+  
+  .schedule-cell::before {
+    text-align: center; /* Centraliza o texto dos labels */
+  }
+  
+
+
+
+
+body {
+
+
+
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 2px;
@@ -18,7 +56,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 1000px;
+    max-width: 800px;
     height: 100%;
     overflow-y: auto; /* Permite rolagem vertical apenas no container */
   }
