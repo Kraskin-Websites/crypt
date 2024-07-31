@@ -5,8 +5,8 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh; /* Garante que a altura mínima seja 100% da altura da viewport */
-    margin: 0;
-    padding: 0;
+    margin: 15px;
+    padding: 15px;
     overflow-x: hidden; /* Remove a rolagem horizontal */
   }
   
@@ -52,7 +52,7 @@ body {
   
   .schedule-container {
     background: #fff;
-    padding: 5px;
+    padding: 15px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
