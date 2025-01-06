@@ -135,7 +135,7 @@
       const items = document.querySelectorAll('#product-list li');
       const products = Array.from(items).map(item => {
         const name = item.querySelector('.product-name').textContent;
-        const quantity = item.querySelector('.product-quantity').textContent;
+        const quantity = item.querySelector('.product-quantity').textContent.replace(' Quantidade', ''); // Remover "Quantidade"
         return { name, quantity };
       });
       localStorage.setItem('products', JSON.stringify(products));
@@ -157,7 +157,8 @@
     function editProduct(button) {
       const li = button.parentElement;
       const quantitySpan = li.querySelector('.product-quantity');
-      const newQuantity = prompt("Digite a nova quantidade:", quantitySpan.textContent.replace(' Quantidade', ''));
+      const currentQuantity = quantitySpan.textContent.replace(' Quantidade', ''); // Remover "Quantidade"
+      const newQuantity = prompt("Digite a nova quantidade:", currentQuantity);
       if (newQuantity && !isNaN(newQuantity) && newQuantity > 0) {
         quantitySpan.textContent = `${newQuantity} Quantidade`;
         saveProducts();
