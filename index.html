@@ -1,156 +1,193 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Escala Semanal de Motoboys</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Lista de Produtos</title>
+  <style>
+    /* Estilos gerais */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    form {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 500px;
+    }
+    input {
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 1em;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Estilo para a lista de produtos */
+    ul {
+      list-style: none;
+      padding: 0;
+      width: 100%;
+      max-width: 500px;
+    }
+    li {
+      background: #fff;
+      margin-bottom: 10px;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .delete-btn, .edit-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .edit-btn {
+      background-color: #28a745;
+    }
+    .delete-btn:hover {
+      background-color: #a71d2a;
+    }
+    .edit-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      form {
+        width: 100%;
+      }
+
+      ul {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      li {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .delete-btn, .edit-btn {
+        margin-top: 10px;
+        width: 100%;
+        text-align: center;
+      }
+
+      /* Reduzir o tamanho dos botões em dispositivos móveis */
+      .delete-btn, .edit-btn {
+        padding: 5px 8px;
+        font-size: 0.9em;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="schedule-container">
-    <h1>Escala Semanal de Motoboys  <br> Pizzaria 1999</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Motoboy</th>
-          <th>Terça</th>
-          <th>Quarta</th>
-          <th>Quinta</th>
-          <th>Sexta</th>
-          <th>Sábado</th>
-          <th>Domingo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <div class="motoboy-info">
-              <img src="./motoboy.jfif" alt="João">
-              <span>Diego</span>
-            </div>
-          </td>
-          <td id="Diego-ter"> <img src="./verde.png" alt=""> </td>
-          <td id="Diego-qua"><img src="./verde.png" alt=""></td>
-          <td id="Diego-qui"><img src="./verde.png" alt=""></td>
-          <td id="Diego-sex"><img src="./verde.png" alt=""></td>
-          <td id="Diego-sab"><img src="./verde.png" alt=""></td>
-          <td id="Diego-dom"> <img src="./vermelho.jfif" alt=""> </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="motoboy-info">
-              <img src="./motoboy.jfif" alt="Maria">
-              <span>Kelvin</span>
-            </div>
-          </td>
-         
-          <td id="Kelvin">-</td>
-          <td id="Kelvin">-</td>
-          <td id="Kelvin">-</td>
-          <td id="Kelvin">-</td>
-          <td id="Kelvin">-</td>
-          <td id="Kelvin">-</td>
-        </tr>
+  <h1>Lista de Produtos</h1>
+  <form id="product-form">
+    <input type="text" id="product-name" placeholder="Digite o produto" required>
+    <input type="number" id="product-quantity" placeholder="Digite a quantidade" min="1" required>
+    <button type="submit">Adicionar</button>
+  </form>
+  <ul id="product-list"></ul>
 
-        <tr>
-            <td>
-              <div class="motoboy-info">
-                <img src="./motoboy.jfif" alt="Maria">
-                <span>Silvio</span>
-              </div>
-            </td>
-           
-            <td id="Silvio">-</td>
-            <td id="Silvio">-</td>
-            <td id="Silvio">-</td>
-            <td id="Silvio">-</td>
-            <td id="Silvio">-</td>
-            <td id="Silvio">-</td>
-          </tr>
+  <script>
+    // Função para carregar produtos do LocalStorage
+    function loadProducts() {
+      const products = JSON.parse(localStorage.getItem('products')) || [];
+      products.forEach(product => addProductToList(product.name, product.quantity));
+    }
 
-          <tr>
-            <td>
-              <div class="motoboy-info">
-                <img src="./motoboy.jfif" alt="Maria">
-                <span>Kelvin</span>
-              </div>
-            </td>
-            
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-          </tr>
+    // Função para salvar produtos no LocalStorage
+    function saveProducts() {
+      const items = document.querySelectorAll('#product-list li');
+      const products = Array.from(items).map(item => {
+        const name = item.querySelector('.product-name').textContent;
+        const quantity = item.querySelector('.product-quantity').textContent;
+        return { name, quantity };
+      });
+      localStorage.setItem('products', JSON.stringify(products));
+    }
 
-          <tr>
-            <td>
-              <div class="motoboy-info">
-                <img src="./motoboy.jfif" alt="Maria">
-                <span>Kelvin</span>
-              </div>
-            </td>
-        
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-          </tr>
+    // Função para adicionar um produto à lista visual
+    function addProductToList(name, quantity) {
+      const productList = document.getElementById('product-list');
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span><strong class="product-name">${name}</strong>: <span class="product-quantity">${quantity} Quantidade</span></span>
+        <button class="edit-btn" onclick="editProduct(this)">Editar</button>
+        <button class="delete-btn" onclick="removeProduct(this)">Remover</button>
+      `;
+      productList.appendChild(li);
+    }
 
-          <tr>
-            <td>
-              <div class="motoboy-info">
-                <img src="./motoboy.jfif" alt="Maria">
-                <span>Kelvin</span>
-              </div>
-            </td>
-            
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-          </tr>
+    // Função para editar a quantidade de um produto
+    function editProduct(button) {
+      const li = button.parentElement;
+      const quantitySpan = li.querySelector('.product-quantity');
+      const newQuantity = prompt("Digite a nova quantidade:", quantitySpan.textContent.replace(' Quantidade', ''));
+      if (newQuantity && !isNaN(newQuantity) && newQuantity > 0) {
+        quantitySpan.textContent = `${newQuantity} Quantidade`;
+        saveProducts();
+      } else {
+        alert("Quantidade inválida!");
+      }
+    }
 
-          <tr>
-            <td>
-              <div class="motoboy-info">
-                <img src="./motoboy.jfif" alt="Maria">
-                <span>Kelvin</span>
-              </div>
-            </td>
-           
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-          </tr>
+    // Função para remover um produto
+    function removeProduct(button) {
+      const li = button.parentElement;
+      li.remove();
+      saveProducts();
+    }
 
-          <tr>
-            <td>
-              <div class="motoboy-info">
-                <img src="./motoboy.jfif" alt="Maria">
-                <span>Kelvin</span>
-              </div>
-            </td>
-           
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-            <td id="Kelvin">-</td>
-          </tr>
-        <!-- Adicione mais motoboys conforme necessário -->
-      </tbody>
-    </table>
-  </div>
-  <script src="java.js"></script>
+    // Evento para adicionar produtos
+    document.getElementById('product-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('product-name').value.trim();
+      const quantity = document.getElementById('product-quantity').value;
+      if (name && quantity) {
+        addProductToList(name, quantity);
+        saveProducts();
+        document.getElementById('product-name').value = '';
+        document.getElementById('product-quantity').value = '';
+      }
+    });
+
+    // Carregar produtos ao iniciar
+    window.onload = loadProducts;
+  </script>
 </body>
 </html>
