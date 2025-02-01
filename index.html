@@ -1,194 +1,138 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lista de Produtos</title>
-  <style>
-    /* Estilos gerais */
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    form {
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 100%;
-      max-width: 500px;
-    }
-    input {
-      padding: 10px;
-      font-size: 1em;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    button {
-      padding: 10px 15px;
-      font-size: 1em;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    /* Estilo para a lista de produtos */
-    ul {
-      list-style: none;
-      padding: 0;
-      width: 100%;
-      max-width: 500px;
-    }
-    li {
-      background: #fff;
-      margin-bottom: 10px;
-      padding: 10px 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .delete-btn, .edit-btn {
-      background-color: #dc3545;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-    .edit-btn {
-      background-color: #28a745;
-    }
-    .delete-btn:hover {
-      background-color: #a71d2a;
-    }
-    .edit-btn:hover {
-      background-color: #218838;
-    }
-
-    /* Responsividade */
-    @media (max-width: 768px) {
-      form {
-        width: 100%;
-      }
-
-      ul {
-        width: 100%;
-        max-width: 100%;
-      }
-
-      li {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .delete-btn, .edit-btn {
-        margin-top: 10px;
-        width: 100%;
-        text-align: center;
-      }
-
-      /* Reduzir o tamanho dos botões em dispositivos móveis */
-      .delete-btn, .edit-btn {
-        padding: 5px 8px;
-        font-size: 0.9em;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Açaí Sabor do Verão</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #6b2a1d;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #ffcc00;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            color: black;
+        }
+        .cup-selection img {
+            width: 80px;
+            margin: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .cup-selection img.selected {
+            border: 2px solid #ffcc00;
+        }
+        .ingredients {
+            display: none;
+            margin-top: 10px;
+        }
+        .ingredients label {
+            display: block;
+            margin: 5px 0;
+        }
+        .order-summary {
+            display: none;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #ffcc00;
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Lista de Produtos</h1>
-  <form id="product-form">
-    <input type="text" id="product-name" placeholder="Digite o produto" required>
-    <input type="number" id="product-quantity" placeholder="Digite a quantidade" min="1" required>
-    <button type="submit">Adicionar</button>
-  </form>
-  <ul id="product-list"></ul>
 
-  <script>
-    // Função para carregar produtos do LocalStorage
-    function loadProducts() {
-      const products = JSON.parse(localStorage.getItem('products')) || [];
-      products.forEach(product => addProductToList(product.name, product.quantity));
-    }
+    <h1>Açaí Sabor do Verão</h1>
+    <div class="container">
+        <h2>Escolha o tamanho do copo:</h2>
+        <div class="cup-selection">
+            <img src="copo-pequeno.png" alt="Pequeno" onclick="selectCup('Pequeno')">
+            <img src="copo-medio.png" alt="Médio" onclick="selectCup('Médio')">
+            <img src="copo-grande.png" alt="Grande" onclick="selectCup('Grande')">
+        </div>
 
-    // Função para salvar produtos no LocalStorage
-    function saveProducts() {
-      const items = document.querySelectorAll('#product-list li');
-      const products = Array.from(items).map(item => {
-        const name = item.querySelector('.product-name').textContent;
-        const quantity = item.querySelector('.product-quantity').textContent.replace(' Quantidade', ''); // Remover "Quantidade"
-        return { name, quantity };
-      });
-      localStorage.setItem('products', JSON.stringify(products));
-    }
+        <div class="ingredients" id="ingredients">
+            <h2>Escolha até 4 ingredientes:</h2>
+            <label><input type="checkbox" value="Banana" onclick="limitSelection()"> Banana</label>
+            <label><input type="checkbox" value="Granola" onclick="limitSelection()"> Granola</label>
+            <label><input type="checkbox" value="Leite Condensado" onclick="limitSelection()"> Leite Condensado</label>
+            <label><input type="checkbox" value="Mel" onclick="limitSelection()"> Mel</label>
+            <label><input type="checkbox" value="M&M's" onclick="limitSelection()"> M&M's</label>
+            <label><input type="checkbox" value="Nutella" onclick="limitSelection()"> Nutella</label>
+        </div>
 
-    // Função para adicionar um produto à lista visual
-    function addProductToList(name, quantity) {
-      const productList = document.getElementById('product-list');
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <span><strong class="product-name">${name}</strong>: <span class="product-quantity">${quantity} Quantidade</span></span>
-        <button class="edit-btn" onclick="editProduct(this)">Editar</button>
-        <button class="delete-btn" onclick="removeProduct(this)">Remover</button>
-      `;
-      productList.appendChild(li);
-    }
+        <button onclick="confirmOrder()">Confirmar Pedido</button>
 
-    // Função para editar a quantidade de um produto
-    function editProduct(button) {
-      const li = button.parentElement;
-      const quantitySpan = li.querySelector('.product-quantity');
-      const currentQuantity = quantitySpan.textContent.replace(' Quantidade', ''); // Remover "Quantidade"
-      const newQuantity = prompt("Digite a nova quantidade:", currentQuantity);
-      if (newQuantity && !isNaN(newQuantity) && newQuantity > 0) {
-        quantitySpan.textContent = `${newQuantity} Quantidade`;
-        saveProducts();
-      } else {
-        alert("Quantidade inválida!");
-      }
-    }
+        <div class="order-summary" id="order-summary">
+            <h2>Resumo do Pedido:</h2>
+            <p id="order-details"></p>
+            <label>CEP para entrega: <input type="text" id="cep" placeholder="Digite seu CEP"></label>
+            <button onclick="validateCep()">Finalizar Pedido</button>
+        </div>
+    </div>
 
-    // Função para remover um produto
-    function removeProduct(button) {
-      const li = button.parentElement;
-      li.remove();
-      saveProducts();
-    }
+    <script>
+        let selectedCup = "";
+        let maxIngredients = 4;
 
-    // Evento para adicionar produtos
-    document.getElementById('product-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const name = document.getElementById('product-name').value.trim();
-      const quantity = document.getElementById('product-quantity').value;
-      if (name && quantity) {
-        addProductToList(name, quantity);
-        saveProducts();
-        document.getElementById('product-name').value = '';
-        document.getElementById('product-quantity').value = '';
-      }
-    });
+        function selectCup(size) {
+            selectedCup = size;
+            document.querySelectorAll('.cup-selection img').forEach(img => img.classList.remove('selected'));
+            event.target.classList.add('selected');
+            document.getElementById('ingredients').style.display = "block";
+        }
 
-    // Carregar produtos ao iniciar
-    window.onload = loadProducts;
-  </script>
+        function limitSelection() {
+            let checked = document.querySelectorAll('.ingredients input[type="checkbox"]:checked');
+            if (checked.length > maxIngredients) {
+                checked[checked.length - 1].checked = false;
+            }
+        }
+
+        function confirmOrder() {
+            let selectedIngredients = [];
+            document.querySelectorAll('.ingredients input[type="checkbox"]:checked').forEach(input => {
+                selectedIngredients.push(input.value);
+            });
+
+            if (!selectedCup) {
+                alert("Escolha um tamanho de copo!");
+                return;
+            }
+            if (selectedIngredients.length === 0) {
+                alert("Escolha pelo menos um ingrediente!");
+                return;
+            }
+
+            document.getElementById('order-details').innerText = 
+                `Copo: ${selectedCup}\nIngredientes: ${selectedIngredients.join(", ")}`;
+            document.getElementById('order-summary').style.display = "block";
+        }
+
+        function validateCep() {
+            let cep = document.getElementById("cep").value;
+            if (cep.startsWith("90") || cep.startsWith("91") || cep.startsWith("92") || cep.startsWith("93")) {
+                alert("Pedido confirmado! Entrega para Porto Alegre.");
+            } else {
+                alert("Entrega disponível apenas para Porto Alegre.");
+            }
+        }
+    </script>
+
 </body>
 </html>
