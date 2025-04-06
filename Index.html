@@ -117,8 +117,8 @@
   <script>
     async function buscarDados() {
       const moeda = document.getElementById("moeda").value.toLowerCase();
-      const urlInfo = `https://api.coingecko.com/api/v3/coins/${moeda}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`;
-      const urlHistorico = `https://api.coingecko.com/api/v3/coins/${moeda}/market_chart?vs_currency=usd&days=7`;
+      const urlInfo = `https://api.coingecko.com/api/v3/coins/${moeda}?localization=false&tickers=false&market_
+      const urlHistorico = `https://api.coingecko.com/api/v3/coins/${moeda}/market_chart?vs_currency=usd&days=7
 
       try {
         const [resInfo, resHist] = await Promise.all([fetch(urlInfo), fetch(urlHistorico)]);
@@ -145,9 +145,9 @@
 
         const volumeHTML = `
           <p><strong>Volume 24h:</strong> US$ ${dados.market_data.total_volume.usd.toLocaleString()}</p>
-          <p><strong>Variação 24h:</strong> <span class="${dados.market_data.price_change_percentage_24h >= 0 ? 'positivo' : 'negativo'}">${dados.market_data.price_change_percentage_24h.toFixed(2)}%</span></p>
-          <p><strong>Variação 7d:</strong> <span class="${dados.market_data.price_change_percentage_7d >= 0 ? 'positivo' : 'negativo'}">${dados.market_data.price_change_percentage_7d.toFixed(2)}%</span></p>
-          <p><strong>Variação 30d:</strong> <span class="${dados.market_data.price_change_percentage_30d >= 0 ? 'positivo' : 'negativo'}">${dados.market_data.price_change_percentage_30d.toFixed(2)}%</span></p>
+          <p><strong>Variação 24h:</strong> <span class="${dados.market_data.price_change_percentage_24h >= 0 ?
+          <p><strong>Variação 7d:</strong> <span class="${dados.market_data.price_change_percentage_7d >= 0 ? '
+          <p><strong>Variação 30d:</strong> <span class="${dados.market_data.price_change_percentage_30d >= 0 ?
         `;
 
         document.getElementById("analise").innerHTML = analiseHTML;
@@ -157,7 +157,7 @@
         localStorage.setItem("volumeHTML", volumeHTML);
 
       } catch (erro) {
-        document.getElementById("analise").innerHTML = "<p>Erro ao buscar dados. Verifique o nome da moeda.</p>";
+        document.getElementById("analise").innerHTML = "<p>Erro ao buscar dados. Verifique o nome da moeda.</p>
         document.getElementById("volume").innerHTML = "";
       }
     }
