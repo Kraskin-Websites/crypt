@@ -1,138 +1,173 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Açaí Sabor do Verão</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #6b2a1d;
-            color: white;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            color: #ffcc00;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            color: black;
-        }
-        .cup-selection img {
-            width: 80px;
-            margin: 10px;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-        .cup-selection img.selected {
-            border: 2px solid #ffcc00;
-        }
-        .ingredients {
-            display: none;
-            margin-top: 10px;
-        }
-        .ingredients label {
-            display: block;
-            margin: 5px 0;
-        }
-        .order-summary {
-            display: none;
-            margin-top: 20px;
-        }
-        button {
-            background-color: #ffcc00;
-            border: none;
-            padding: 10px;
-            margin-top: 10px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=de
+  <title>Análise Técnica de Criptomoedas<
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bott
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #00d9ff;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .box {
+      background-color: rgba(0, 0, 0, 0.
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px #000;
+    }
+
+    label, input, button {
+      display: block;
+      margin: 10px auto;
+      font-size: 1rem;
+    }
+
+    input, button {
+      padding: 10px;
+      width: 90%;
+      border-radius: 10px;
+      border: none;
+    }
+
+    button {
+      background-color: #00d9ff;
+      color: #000;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #00b3cc;
+    }
+
+    .analise p {
+      margin: 6px 0;
+    }
+
+    .positivo {
+      color: #00ff9d;
+    }
+
+    .negativo {
+      color: #ff6a6a;
+    }
+
+    .imagem-cripto {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .imagem-cripto img {
+      width: 100px;
+      height: 100px;
+    }
+
+    @media (max-width: 600px) {
+      .box {
+        padding: 15px;
+      }
+
+      input, button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Análise Técnica de Criptomoedas</
 
-    <h1>Açaí Sabor do Verão</h1>
-    <div class="container">
-        <h2>Escolha o tamanho do copo:</h2>
-        <div class="cup-selection">
-            <img src="copo-pequeno.png" alt="Pequeno" onclick="selectCup('Pequeno')">
-            <img src="copo-medio.png" alt="Médio" onclick="selectCup('Médio')">
-            <img src="copo-grande.png" alt="Grande" onclick="selectCup('Grande')">
-        </div>
-
-        <div class="ingredients" id="ingredients">
-            <h2>Escolha até 4 ingredientes:</h2>
-            <label><input type="checkbox" value="Banana" onclick="limitSelection()"> Banana</label>
-            <label><input type="checkbox" value="Granola" onclick="limitSelection()"> Granola</label>
-            <label><input type="checkbox" value="Leite Condensado" onclick="limitSelection()"> Leite Condensado</label>
-            <label><input type="checkbox" value="Mel" onclick="limitSelection()"> Mel</label>
-            <label><input type="checkbox" value="M&M's" onclick="limitSelection()"> M&M's</label>
-            <label><input type="checkbox" value="Nutella" onclick="limitSelection()"> Nutella</label>
-        </div>
-
-        <button onclick="confirmOrder()">Confirmar Pedido</button>
-
-        <div class="order-summary" id="order-summary">
-            <h2>Resumo do Pedido:</h2>
-            <p id="order-details"></p>
-            <label>CEP para entrega: <input type="text" id="cep" placeholder="Digite seu CEP"></label>
-            <button onclick="validateCep()">Finalizar Pedido</button>
-        </div>
+    <!-- Seção 1: Buscar Moeda -->
+    <div class="box">
+      <h2>1. Buscar Moeda</h2>
+      <label for="moeda">Digite o nome da
+      <input type="text" id="moeda" place
+      <button onclick="buscarDados()">Bus
     </div>
 
-    <script>
-        let selectedCup = "";
-        let maxIngredients = 4;
+    <!-- Seção 2: Suporte e Resistência -
+    <div class="box">
+      <h2>2. Suporte e Resistência</h2>
+      <div id="analise" class="analise"><
+    </div>
 
-        function selectCup(size) {
-            selectedCup = size;
-            document.querySelectorAll('.cup-selection img').forEach(img => img.classList.remove('selected'));
-            event.target.classList.add('selected');
-            document.getElementById('ingredients').style.display = "block";
-        }
+    <!-- Seção 3: Volume e Variações -->
+    <div class="box">
+      <h2>3. Volume e Variações</h2>
+      <div id="volume" class="analise"></
+    </div>
+  </div>
 
-        function limitSelection() {
-            let checked = document.querySelectorAll('.ingredients input[type="checkbox"]:checked');
-            if (checked.length > maxIngredients) {
-                checked[checked.length - 1].checked = false;
-            }
-        }
+  <script>
+    async function buscarDados() {
+      const moeda = document.getElementBy
+      const urlInfo = `https://api.coinge
+      const urlHistorico = `https://api.c
 
-        function confirmOrder() {
-            let selectedIngredients = [];
-            document.querySelectorAll('.ingredients input[type="checkbox"]:checked').forEach(input => {
-                selectedIngredients.push(input.value);
-            });
+      try {
+        const [resInfo, resHist] = await 
+        const dados = await resInfo.json(
+        const historico = await resHist.j
 
-            if (!selectedCup) {
-                alert("Escolha um tamanho de copo!");
-                return;
-            }
-            if (selectedIngredients.length === 0) {
-                alert("Escolha pelo menos um ingrediente!");
-                return;
-            }
+        const precoAtual = dados.market_d
+        const valores = historico.prices.
+        const max7d = Math.max(...valores
+        const min7d = Math.min(...valores
 
-            document.getElementById('order-details').innerText = 
-                `Copo: ${selectedCup}\nIngredientes: ${selectedIngredients.join(", ")}`;
-            document.getElementById('order-summary').style.display = "block";
-        }
+        const resistencia = (max7d * 1.03
+        const suporte = (min7d * 0.97).to
+        const resistenciaImediata = (prec
 
-        function validateCep() {
-            let cep = document.getElementById("cep").value;
-            if (cep.startsWith("90") || cep.startsWith("91") || cep.startsWith("92") || cep.startsWith("93")) {
-                alert("Pedido confirmado! Entrega para Porto Alegre.");
-            } else {
-                alert("Entrega disponível apenas para Porto Alegre.");
-            }
-        }
-    </script>
+        const analiseHTML = `
+          <p><strong>Moeda:</strong> ${da
+          <p><strong>Preço atual:</strong
+          <p><strong>Resistência (7d):</s
+          <p><strong>Suporte (7d):</stron
+          <p><strong>Resistência imediata
+          <div class="imagem-cripto"><img
+        `;
 
+        const volumeHTML = `
+          <p><strong>Volume 24h:</strong>
+          <p><strong>Variação 24h:</stron
+          <p><strong>Variação 7d:</strong
+          <p><strong>Variação 30d:</stron
+        `;
+
+        document.getElementById("analise"
+        document.getElementById("volume")
+
+        localStorage.setItem("analiseHTML
+        localStorage.setItem("volumeHTML"
+
+      } catch (erro) {
+        document.getElementById("analise"
+        document.getElementById("volume")
+      }
+    }
+
+    window.onload = () => {
+      const analiseSalva = localStorage.g
+      const volumeSalvo = localStorage.ge
+      if (analiseSalva) document.getEleme
+      if (volumeSalvo) document.getElemen
+    };
+  </script>
 </body>
 </html>
