@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análise Técnica de Criptomoedas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #00d9ff;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .box {
+      background-color: rgba(0, 0, 0, 0.4);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px #000;
+    }
+
+    label, input, button {
+      display: block;
+      margin: 10px auto;
+      font-size: 1rem;
+    }
+
+    input, button {
+      padding: 10px;
+      width: 90%;
+      border-radius: 10px;
+      border: none;
+    }
+
+    button {
+      background-color: #00d9ff;
+      color: #000;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #00b3cc;
+    }
+
+    .analise p {
+      margin: 6px 0;
+    }
+
+    .positivo {
+      color: #00ff9d;
+    }
+
+    .negativo {
+      color: #ff6a6a;
+    }
+
+    .imagem-cripto {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .imagem-cripto img {
+      width: 100px;
+      height: 100px;
+    }
+
+    @media (max-width: 600px) {
+      .box {
+        padding: 15px;
+      }
+
+      input, button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Análise Técnica de Criptomoedas</h1>
+
+    <!-- Seção 1: Buscar Moeda -->
+    <div class="box">
+      <h2>1. Buscar Moeda</h2>
+      <label for="moeda">Digite o nome da moeda (ex: bitcoin-cash, pendle):</label>
+      <input type="text" id="moeda" placeholder="Ex: bitcoin-cash" />
+      <button onclick="buscarDados()">Buscar Dados</button>
+    </div>
+
+    <!-- Seção 2: Suporte e Resistência -->
+    <div class="box">
+      <h2>2. Suporte e Resistência</h2>
+      <div id="analise" class="analise"></div>
+    </div>
+
+    <!-- Seção 3: Volume e Variações -->
+    <div class="box">
+      <h2>3. Volume e Variações</h2>
+      <div id="volume" class="analise"></div>
+    </div>
+  </div>
+
+  <script>
+    async function buscarDados() {
+      const moeda = document.getElementById("moeda").value.toLowerCase();
+      const urlInfo = `https://api.coingecko.com/api/v3/coins/${moeda}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`;
+      const urlHistorico = `https://api.coingecko.com/api/v3/coins/${moeda}/market_chart?vs_currency=usd&days=7`;
+
+      try {
+        const [resInfo, resHist] = await Promise.all([fetch(urlInfo), fetch(urlHistorico)]);
+        const dados = await resInfo.json();
+        const historico = await resHist.json();
+
+        const precoAtual = dados.market_data.current_price.usd;
+        const valores = historico.prices.map(p => p[1]);
+        const max7d = Math.max(...valores);
+        const min7d = Math.min(...valores);
+
+        const resistencia = (max7d * 1.03).toFixed(2);
+        const suporte = (min7d * 0.97).toFixed(2);
+        const resistenciaImediata = (precoAtual * 1.02).toFixed(2);
+
+        const analiseHTML = `
+          <p><strong>Moeda:</strong> ${dados.name} (${dados.symbol.toUpperCase()})</p>
+          <p><strong>Preço atual:</strong> US$ ${precoAtual.toFixed(2)}</p>
+          <p><strong>Resistência (7d):</strong> US$ ${resistencia}</p>
+          <p><strong>Suporte (7d):</strong> US$ ${suporte}</p>
+          <p><strong>Resistência imediata:</strong> US$ ${resistenciaImediata}</p>
+          <div class="imagem-cripto"><img src="${dados.image.large}" alt="Imagem da moeda" /></div>
+        `;
+
+        const volumeHTML = `
+          <p><strong>Volume 24h:</strong> US$ ${dados.market_data.total_volume.usd.toLocaleString()}</p>
+          <p><strong>Variação 24h:</strong> <span class="${dados.market_data.price_change_percentage_24h >= 0 ? 'positivo' : 'negativo'}">${dados.market_data.price_change_percentage_24h.toFixed(2)}%</span></p>
+          <p><strong>Variação 7d:</strong> <span class="${dados.market_data.price_change_percentage_7d >= 0 ? 'positivo' : 'negativo'}">${dados.market_data.price_change_percentage_7d.toFixed(2)}%</span></p>
+          <p><strong>Variação 30d:</strong> <span class="${dados.market_data.price_change_percentage_30d >= 0 ? 'positivo' : 'negativo'}">${dados.market_data.price_change_percentage_30d.toFixed(2)}%</span></p>
+        `;
+
+        document.getElementById("analise").innerHTML = analiseHTML;
+        document.getElementById("volume").innerHTML = volumeHTML;
+
+        localStorage.setItem("analiseHTML", analiseHTML);
+        localStorage.setItem("volumeHTML", volumeHTML);
+
+      } catch (erro) {
+        document.getElementById("analise").innerHTML = "<p>Erro ao buscar dados. Verifique o nome da moeda.</p>";
+        document.getElementById("volume").innerHTML = "";
+      }
+    }
+
+    window.onload = () => {
+      const analiseSalva = localStorage.getItem("analiseHTML");
+      const volumeSalvo = localStorage.getItem("volumeHTML");
+      if (analiseSalva) document.getElementById("analise").innerHTML = analiseSalva;
+      if (volumeSalvo) document.getElementById("volume").innerHTML = volumeSalvo;
+    };
+  </script>
+</body>
+</html>
