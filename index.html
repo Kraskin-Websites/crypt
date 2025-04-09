@@ -2,87 +2,73 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=de
-  <title>Análise Técnica de Criptomoedas<
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Análise Técnica de Criptomoedas</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(to bott
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
       color: #fff;
       margin: 0;
       padding: 20px;
     }
-
     h1, h2 {
       text-align: center;
       color: #00d9ff;
     }
-
     .container {
       max-width: 1000px;
       margin: auto;
     }
-
     .box {
-      background-color: rgba(0, 0, 0, 0.
+      background-color: rgba(0, 0, 0, 0.4);
       border-radius: 15px;
       padding: 20px;
       margin-bottom: 20px;
       box-shadow: 0 0 10px #000;
     }
-
-    label, input, button {
+    label, select, input, button {
       display: block;
       margin: 10px auto;
       font-size: 1rem;
     }
-
-    input, button {
+    input, select, button {
       padding: 10px;
       width: 90%;
       border-radius: 10px;
       border: none;
     }
-
     button {
       background-color: #00d9ff;
       color: #000;
       cursor: pointer;
       font-weight: bold;
     }
-
     button:hover {
       background-color: #00b3cc;
     }
-
     .analise p {
       margin: 6px 0;
     }
-
     .positivo {
       color: #00ff9d;
     }
-
     .negativo {
       color: #ff6a6a;
     }
-
     .imagem-cripto {
       display: flex;
       justify-content: center;
       margin-top: 10px;
     }
-
     .imagem-cripto img {
       width: 100px;
       height: 100px;
     }
-
     @media (max-width: 600px) {
       .box {
         padding: 15px;
       }
-
       input, button {
         width: 100%;
       }
@@ -91,82 +77,112 @@
 </head>
 <body>
   <div class="container">
-    <h1>Análise Técnica de Criptomoedas</
+    <h1>Análise Técnica de Criptomoedas</h1>
 
-    <!-- Seção 1: Buscar Moeda -->
     <div class="box">
-      <h2>1. Buscar Moeda</h2>
-      <label for="moeda">Digite o nome da
-      <input type="text" id="moeda" place
-      <button onclick="buscarDados()">Bus
+      <h2>1. Selecionar Moeda</h2>
+      <label for="moeda">Escolha a moeda:</label>
+      <select id="moeda">
+        <option value="bitcoin">Bitcoin</option>
+        <option value="ethereum">Ethereum</option>
+        <option value="binancecoin">BNB</option>
+        <option value="ripple">XRP</option>
+        <option value="cardano">Cardano</option>
+        <option value="solana">Solana</option>
+        <option value="dogecoin">Dogecoin</option>
+        <option value="polkadot">Polkadot</option>
+        <option value="litecoin">Litecoin</option>
+        <option value="tron">TRON</option>
+        <option value="avalanche-2">Avalanche</option>
+        <option value="bitcoin-cash">Bitcoin Cash</option>
+        <option value="pendle">Pendle</option>
+      </select>
+
+      <label for="periodo">Período de análise:</label>
+      <select id="periodo">
+        <option value="1">24 horas</option>
+        <option value="7" selected>7 dias</option>
+      </select>
+
+      <button onclick="buscarDados()">Buscar Dados</button>
     </div>
 
-    <!-- Seção 2: Suporte e Resistência -
     <div class="box">
-      <h2>2. Suporte e Resistência</h2>
-      <div id="analise" class="analise"><
+      <h2>2. Suporte, Resistência e Tendência</h2>
+      <div id="analise" class="analise"></div>
     </div>
 
-    <!-- Seção 3: Volume e Variações -->
     <div class="box">
-      <h2>3. Volume e Variações</h2>
-      <div id="volume" class="analise"></
+      <h2>3. Volume, Variação e Indicadores</h2>
+      <div id="volume" class="analise"></div>
     </div>
   </div>
 
   <script>
     async function buscarDados() {
-      const moeda = document.getElementBy
-      const urlInfo = `https://api.coinge
-      const urlHistorico = `https://api.c
+      const moeda = document.getElementById("moeda").value;
+      const periodo = document.getElementById("periodo").value;
+      const urlInfo = `https://api.coingecko.com/api/v3/coins/${moeda}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`;
+      const urlHistorico = `https://api.coingecko.com/api/v3/coins/${moeda}/market_chart?vs_currency=usd&days=${periodo}`;
 
       try {
-        const [resInfo, resHist] = await 
-        const dados = await resInfo.json(
-        const historico = await resHist.j
+        const [resInfo, resHist] = await Promise.all([fetch(urlInfo), fetch(urlHistorico)]);
+        const dados = await resInfo.json();
+        const historico = await resHist.json();
 
-        const precoAtual = dados.market_d
-        const valores = historico.prices.
-        const max7d = Math.max(...valores
-        const min7d = Math.min(...valores
+        const precoAtual = dados.market_data.current_price.usd;
+        const valores = historico.prices.map(p => p[1]);
+        const maxPeriodo = Math.max(...valores);
+        const minPeriodo = Math.min(...valores);
 
-        const resistencia = (max7d * 1.03
-        const suporte = (min7d * 0.97).to
-        const resistenciaImediata = (prec
+        const resistencia = (maxPeriodo * 1.03).toFixed(2);
+        const suporte = (minPeriodo * 0.97).toFixed(2);
+        const resistenciaImediata = (precoAtual * 1.02).toFixed(2);
+        const suporteImediato = (precoAtual * 0.98).toFixed(2);
+
+        const rsi = (Math.random() * (80 - 20) + 20).toFixed(2);
+        const macd = (Math.random() * (2) - 1).toFixed(4);
+
+        const variacao = periodo === "1"
+          ? dados.market_data.price_change_percentage_24h
+          : dados.market_data.price_change_percentage_7d;
+
+        const tendencia = variacao >= 0 ? "Alta" : "Queda";
 
         const analiseHTML = `
-          <p><strong>Moeda:</strong> ${da
-          <p><strong>Preço atual:</strong
-          <p><strong>Resistência (7d):</s
-          <p><strong>Suporte (7d):</stron
-          <p><strong>Resistência imediata
-          <div class="imagem-cripto"><img
+          <p><strong>Moeda:</strong> ${dados.name} (${dados.symbol.toUpperCase()})</p>
+          <p><strong>Preço atual:</strong> US$ ${precoAtual.toFixed(2)}</p>
+          <p><strong>Resistência (período):</strong> US$ ${resistencia}</p>
+          <p><strong>Suporte (período):</strong> US$ ${suporte}</p>
+          <p><strong>Resistência imediata:</strong> US$ ${resistenciaImediata}</p>
+          <p><strong>Suporte imediato:</strong> US$ ${suporteImediato}</p>
+          <p><strong>Tendência:</strong> <span class="${tendencia === 'Alta' ? 'positivo' : 'negativo'}">${tendencia}</span></p>
+          <div class="imagem-cripto"><img src="${dados.image.large}" alt="Imagem da moeda" /></div>
         `;
 
         const volumeHTML = `
-          <p><strong>Volume 24h:</strong>
-          <p><strong>Variação 24h:</stron
-          <p><strong>Variação 7d:</strong
-          <p><strong>Variação 30d:</stron
+          <p><strong>Volume 24h:</strong> US$ ${dados.market_data.total_volume.usd.toLocaleString()}</p>
+          <p><strong>Variação ${periodo}d:</strong> <span class="${variacao >= 0 ? 'positivo' : 'negativo'}">${variacao.toFixed(2)}%</span></p>
+          <p><strong>RSI (simulado):</strong> ${rsi}</p>
+          <p><strong>MACD (simulado):</strong> ${macd}</p>
         `;
 
-        document.getElementById("analise"
-        document.getElementById("volume")
+        document.getElementById("analise").innerHTML = analiseHTML;
+        document.getElementById("volume").innerHTML = volumeHTML;
 
-        localStorage.setItem("analiseHTML
-        localStorage.setItem("volumeHTML"
-
+        localStorage.setItem("analiseHTML", analiseHTML);
+        localStorage.setItem("volumeHTML", volumeHTML);
       } catch (erro) {
-        document.getElementById("analise"
-        document.getElementById("volume")
+        document.getElementById("analise").innerHTML = "<p>Erro ao buscar dados. Verifique a conexão ou tente novamente.</p>";
+        document.getElementById("volume").innerHTML = "";
       }
     }
 
     window.onload = () => {
-      const analiseSalva = localStorage.g
-      const volumeSalvo = localStorage.ge
-      if (analiseSalva) document.getEleme
-      if (volumeSalvo) document.getElemen
+      const analiseSalva = localStorage.getItem("analiseHTML");
+      const volumeSalvo = localStorage.getItem("volumeHTML");
+      if (analiseSalva) document.getElementById("analise").innerHTML = analiseSalva;
+      if (volumeSalvo) document.getElementById("volume").innerHTML = volumeSalvo;
     };
   </script>
 </body>
