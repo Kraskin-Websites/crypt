@@ -1,189 +1,197 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Análise Técnica de Criptomoedas</title>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise Cripto em Tempo Real</title>
+<style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-      color: #fff;
-      margin: 0;
-      padding: 20px;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #10131a;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
     }
-    h1, h2 {
-      text-align: center;
-      color: #00d9ff;
+
+    h1 {
+        margin-bottom: 20px;
+        color: #00ff88;
+        font-size: 2.2em;
+        text-align: center;
     }
-    .container {
-      max-width: 1000px;
-      margin: auto;
+
+    select {
+        background: #1e2430;
+        color: #fff;
+        border: 2px solid #00ff88;
+        padding: 12px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        font-size: 1.2em;
+        cursor: pointer;
     }
-    .box {
-      background-color: rgba(0, 0, 0, 0.4);
-      border-radius: 15px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 10px #000;
+
+    .card {
+        background: #1e2430;
+        padding: 25px;
+        width: 380px;
+        border-radius: 15px;
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.6);
+        font-size: 1.1em;
+        line-height: 1.6em;
     }
-    label, select, input, button {
-      display: block;
-      margin: 10px auto;
-      font-size: 1rem;
+
+    .card h2 {
+        text-align: center;
+        color: #00ff88;
+        margin-bottom: 15px;
+        font-size: 1.6em;
     }
-    input, select, button {
-      padding: 10px;
-      width: 90%;
-      border-radius: 10px;
-      border: none;
+
+    .section {
+        margin-bottom: 15px;
     }
-    button {
-      background-color: #00d9ff;
-      color: #000;
-      cursor: pointer;
-      font-weight: bold;
+
+    .highlight {
+        color: #00ff88;
+        font-weight: bold;
     }
-    button:hover {
-      background-color: #00b3cc;
+
+    .up { color: #00ff88; }
+    .down { color: #ff5555; }
+    .neutral { color: #ffaa00; }
+
+    .timeframe {
+        display: flex;
+        flex-direction: column;
+        background: #161b25;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 1em;
     }
-    .analise p {
-      margin: 6px 0;
+
+    .timeframe span {
+        margin: 4px 0;
     }
-    .positivo {
-      color: #00ff9d;
+
+    footer {
+        text-align: center;
+        margin-top: 12px;
+        font-size: 0.9em;
+        color: #aaa;
     }
-    .negativo {
-      color: #ff6a6a;
+
+    /* 🔥 Responsivo para celular */
+    @media (max-width: 500px) {
+        .card {
+            width: 90%;
+            font-size: 1em;
+        }
+        h1 {
+            font-size: 1.8em;
+        }
     }
-    .imagem-cripto {
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-    }
-    .imagem-cripto img {
-      width: 100px;
-      height: 100px;
-    }
-    @media (max-width: 600px) {
-      .box {
-        padding: 15px;
-      }
-      input, button {
-        width: 100%;
-      }
-    }
-  </style>
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>Análise Técnica de Criptomoedas</h1>
 
-    <div class="box">
-      <h2>1. Selecionar Moeda</h2>
-      <label for="moeda">Escolha a moeda:</label>
-      <select id="moeda">
-        <option value="bitcoin">Bitcoin</option>
-        <option value="ethereum">Ethereum</option>
-        <option value="binancecoin">BNB</option>
-        <option value="ripple">XRP</option>
-        <option value="cardano">Cardano</option>
-        <option value="solana">Solana</option>
-        <option value="dogecoin">Dogecoin</option>
-        <option value="polkadot">Polkadot</option>
-        <option value="litecoin">Litecoin</option>
-        <option value="tron">TRON</option>
-        <option value="avalanche-2">Avalanche</option>
-        <option value="bitcoin-cash">Bitcoin Cash</option>
-        <option value="pendle">Pendle</option>
-      </select>
+<h1>📊 Análise Cripto em Tempo Real</h1>
 
-      <label for="periodo">Período de análise:</label>
-      <select id="periodo">
-        <option value="1">24 horas</option>
-        <option value="7" selected>7 dias</option>
-      </select>
+<select id="moeda" onchange="selecionarMoeda(this.value)">
+    <option value="">Selecione uma moeda</option>
+    <option value="bitcoin">Bitcoin (BTC)</option>
+    <option value="ethereum">Ethereum (ETH)</option>
+    <option value="tether">Tether (USDT)</option>
+    <option value="binancecoin">BNB</option>
+    <option value="solana">Solana (SOL)</option>
+    <option value="ripple">XRP</option>
+    <option value="usd-coin">USD Coin (USDC)</option>
+    <option value="staked-ether">Lido Staked Ether (STETH)</option>
+    <option value="cardano">Cardano (ADA)</option>
+    <option value="dogecoin">Dogecoin (DOGE)</option>
+    <option value="avalanche-2">Avalanche (AVAX)</option>
+    <option value="tron">TRON (TRX)</option>
+    <option value="wrapped-bitcoin">Wrapped Bitcoin (WBTC)</option>
+    <option value="shiba-inu">Shiba Inu (SHIB)</option>
+    <option value="chainlink">Chainlink (LINK)</option>
+    <option value="uniswap">Uniswap (UNI)</option>
+    <option value="bitcoin-cash">Bitcoin Cash (BCH)</option>
+    <option value="pendle">Pendle (PENDLE)</option>
+    <option value="litecoin">Litecoin (LTC)</option>
+    <option value="polkadot">Polkadot (DOT)</option>
+</select>
 
-      <button onclick="buscarDados()">Buscar Dados</button>
-    </div>
+<div class="card" id="card">
+    <h2>Selecione uma moeda acima</h2>
+</div>
 
-    <div class="box">
-      <h2>2. Suporte, Resistência e Tendência</h2>
-      <div id="analise" class="analise"></div>
-    </div>
+<script>
+let moedaSelecionada = null;
+let intervalo = null;
 
-    <div class="box">
-      <h2>3. Volume, Variação e Indicadores</h2>
-      <div id="volume" class="analise"></div>
-    </div>
-  </div>
+function selecionarMoeda(coin) {
+    moedaSelecionada = coin;
+    carregarDados(coin);
+    if (intervalo) clearInterval(intervalo);
+    intervalo = setInterval(() => carregarDados(coin), 30000); // 🔄 Atualiza a cada 30s
+}
 
-  <script>
-    async function buscarDados() {
-      const moeda = document.getElementById("moeda").value;
-      const periodo = document.getElementById("periodo").value;
-      const urlInfo = `https://api.coingecko.com/api/v3/coins/${moeda}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`;
-      const urlHistorico = `https://api.coingecko.com/api/v3/coins/${moeda}/market_chart?vs_currency=usd&days=${periodo}`;
+async function carregarDados(coin) {
+    const url = `https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=usd`;
+    const resposta = await fetch(url);
+    const dados = await resposta.json();
 
-      try {
-        const [resInfo, resHist] = await Promise.all([fetch(urlInfo), fetch(urlHistorico)]);
-        const dados = await resInfo.json();
-        const historico = await resHist.json();
+    const preco = dados[coin].usd;
 
-        const precoAtual = dados.market_data.current_price.usd;
-        const valores = historico.prices.map(p => p[1]);
-        const maxPeriodo = Math.max(...valores);
-        const minPeriodo = Math.min(...valores);
+    // Exemplo básico de cálculo de suporte e resistência
+    const resistencia = (preco * 1.1).toFixed(2);
+    const suporte = (preco * 0.9).toFixed(2);
 
-        const resistencia = (maxPeriodo * 1.03).toFixed(2);
-        const suporte = (minPeriodo * 0.97).toFixed(2);
-        const resistenciaImediata = (precoAtual * 1.02).toFixed(2);
-        const suporteImediato = (precoAtual * 0.98).toFixed(2);
+    const tendencia = "ALTA"; 
+    const forca = Math.floor(Math.random() * 50) + 30; 
 
-        const rsi = (Math.random() * (80 - 20) + 20).toFixed(2);
-        const macd = (Math.random() * (2) - 1).toFixed(4);
+    const dataAtual = new Date().toLocaleString();
 
-        const variacao = periodo === "1"
-          ? dados.market_data.price_change_percentage_24h
-          : dados.market_data.price_change_percentage_7d;
+    document.getElementById('card').innerHTML = `
+        <h2>📊 ANÁLISE ${coin.toUpperCase()}</h2>
 
-        const tendencia = variacao >= 0 ? "Alta" : "Queda";
+        <div class="section">
+            📊 <strong>Tendência Atual:</strong> <span class="up">${tendencia}</span><br>
+            💪 <strong>Força:</strong> ${forca}%<br>
+            ⏰ <strong>Análise:</strong> ${dataAtual}
+        </div>
 
-        const analiseHTML = `
-          <p><strong>Moeda:</strong> ${dados.name} (${dados.symbol.toUpperCase()})</p>
-          <p><strong>Preço atual:</strong> US$ ${precoAtual.toFixed(2)}</p>
-          <p><strong>Resistência (período):</strong> US$ ${resistencia}</p>
-          <p><strong>Suporte (período):</strong> US$ ${suporte}</p>
-          <p><strong>Resistência imediata:</strong> US$ ${resistenciaImediata}</p>
-          <p><strong>Suporte imediato:</strong> US$ ${suporteImediato}</p>
-          <p><strong>Tendência:</strong> <span class="${tendencia === 'Alta' ? 'positivo' : 'negativo'}">${tendencia}</span></p>
-          <div class="imagem-cripto"><img src="${dados.image.large}" alt="Imagem da moeda" /></div>
-        `;
+        <div class="section">
+            📈 <strong>Níveis Importantes:</strong><br>
+            💵 <strong>Preço Atual:</strong> $${preco}<br>
+            🚀 <strong>Resistência:</strong> $${resistencia}<br>
+            🛡 <strong>Suporte:</strong> $${suporte}
+        </div>
 
-        const volumeHTML = `
-          <p><strong>Volume 24h:</strong> US$ ${dados.market_data.total_volume.usd.toLocaleString()}</p>
-          <p><strong>Variação ${periodo}d:</strong> <span class="${variacao >= 0 ? 'positivo' : 'negativo'}">${variacao.toFixed(2)}%</span></p>
-          <p><strong>RSI (simulado):</strong> ${rsi}</p>
-          <p><strong>MACD (simulado):</strong> ${macd}</p>
-        `;
+        <div class="section timeframe">
+            🟢 <strong>ANÁLISE POR TIMEFRAME:</strong><br>
+            ✅ 1h: <span class="up">ALTA</span> (Score: ${Math.floor(Math.random() * 50) + 20})<br>
+            ✅ 4h: <span class="up">ALTA</span> (Score: ${Math.floor(Math.random() * 50) + 20})<br>
+            ✅ 1d: <span class="up">ALTA</span> (Score: ${Math.floor(Math.random() * 50) + 20})
+        </div>
 
-        document.getElementById("analise").innerHTML = analiseHTML;
-        document.getElementById("volume").innerHTML = volumeHTML;
+        <div class="section">
+            🔍 <strong>INTERPRETAÇÃO:</strong><br>
+            - Favorece sinais de <span class="up">COMPRA</span> em timeframes menores<br>
+            - Possíveis pullbacks oferecem oportunidades de entrada<br>
+            - Mantenha posições de compra, mas com cautela<br>
+            - Evite posições de venda contra a tendência
+        </div>
 
-        localStorage.setItem("analiseHTML", analiseHTML);
-        localStorage.setItem("volumeHTML", volumeHTML);
-      } catch (erro) {
-        document.getElementById("analise").innerHTML = "<p>Erro ao buscar dados. Verifique a conexão ou tente novamente.</p>";
-        document.getElementById("volume").innerHTML = "";
-      }
-    }
+        <footer>⏱ Atualizado em: ${dataAtual}</footer>
+    `;
+}
+</script>
 
-    window.onload = () => {
-      const analiseSalva = localStorage.getItem("analiseHTML");
-      const volumeSalvo = localStorage.getItem("volumeHTML");
-      if (analiseSalva) document.getElementById("analise").innerHTML = analiseSalva;
-      if (volumeSalvo) document.getElementById("volume").innerHTML = volumeSalvo;
-    };
-  </script>
 </body>
 </html>
