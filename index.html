@@ -183,12 +183,24 @@ async function buscarDados(){
       <p><strong>MACD:</strong> ${macdObj.macd} | <strong>Sinal:</strong> ${macdObj.signal}</p>
     `;
 
-    let sugestao="";
-    if(rsi!=="N/A"){
-      if(rsi<30 && tendencia==="Alta") sugestao="Ponto de entrada sugerido: oportunidade de COMPRA, mercado sobrevendido e tendência de recuperação.";
-      else if(rsi>70 && tendencia==="Queda") sugestao="Ponto de entrada sugerido: oportunidade de VENDA, mercado sobrecomprado e tendência de correção.";
-      else sugestao="Mercado em zona neutra, aguardar confirmação de movimento.";
-    } else sugestao="Indicadores insuficientes para sugestão.";
+    // Substitua esta parte do seu código dentro da função buscarDados()
+
+let sugestao="";
+if(rsi!=="N/A"){
+  if(precoAtual>=resistenciaImediata){
+    sugestao=`Ponto de entrada sugerido: LONG, preço rompeu resistência imediata (US$ ${resistenciaImediata}).`;
+  } else if(precoAtual<=suporteImediato){
+    sugestao=`Ponto de entrada sugerido: SHORT, preço testando suporte imediato (US$ ${suporteImediato}).`;
+  } else if(rsi<30 && tendencia==="Alta"){
+    sugestao="Ponto de entrada sugerido: oportunidade de COMPRA, mercado sobrevendido e tendência de recuperação.";
+  } else if(rsi>70 && tendencia==="Queda"){
+    sugestao="Ponto de entrada sugerido: oportunidade de VENDA, mercado sobrecomprado e tendência de correção.";
+  } else {
+    sugestao="Mercado em zona neutra, aguardar confirmação de movimento.";
+  }
+} else {
+  sugestao="Indicadores insuficientes para sugestão.";
+}
 
     document.getElementById("analise").innerHTML=analiseHTML;
     document.getElementById("volume").innerHTML=volumeHTML;
@@ -215,3 +227,4 @@ window.onload=()=>{
 </script>
 </body>
 </html>
+
