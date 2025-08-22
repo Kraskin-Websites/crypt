@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Análise Técnica de Criptomoedas</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -66,15 +68,12 @@
       height: 100px;
     }
     @media (max-width: 600px) {
-      .box {
-        padding: 15px;
-      }
-      input, button {
-        width: 100%;
-      }
+      .box { padding: 15px; }
+      input, button { width: 100%; }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>Análise Técnica de Criptomoedas</h1>
@@ -115,6 +114,11 @@
     <div class="box">
       <h2>3. Volume, Variação e Indicadores</h2>
       <div id="volume" class="analise"></div>
+    </div>
+
+    <div class="box">
+      <h2>4. Resumo de Sugestão</h2>
+      <div id="sugestao" class="analise"></div>
     </div>
   </div>
 
@@ -167,22 +171,44 @@
           <p><strong>MACD (simulado):</strong> ${macd}</p>
         `;
 
+        // Resumo de sugestão com ponto de entrada
+        let sugestaoTexto = "";
+        if (tendencia === "Alta" && rsi < 70 && macd > 0) {
+          sugestaoTexto = `📈 Possível cenário de compra. <br>➡️ Ponto de entrada: acima de US$ ${resistenciaImediata}`;
+        } else if (tendencia === "Queda" && rsi > 30 && macd < 0) {
+          sugestaoTexto = `📉 Atenção: tendência de queda pode continuar. <br>➡️ Ponto de entrada: após teste do suporte imediato em US$ ${suporteImediato}`;
+        } else if (rsi >= 70) {
+          sugestaoTexto = `⚠️ Mercado sobrecomprado, possível correção. <br>➡️ Ponto de entrada: esperar correção abaixo de US$ ${resistenciaImediata}`;
+        } else if (rsi <= 30) {
+          sugestaoTexto = `💡 Mercado sobrevendido, pode haver recuperação. <br>➡️ Ponto de entrada: próximo ao suporte imediato em US$ ${suporteImediato}`;
+        } else {
+          sugestaoTexto = "ℹ️ Mercado neutro, aguardar confirmação de movimento.";
+        }
+
+        const sugestaoHTML = `<p><strong>Sugestão:</strong><br>${sugestaoTexto}</p>`;
+
         document.getElementById("analise").innerHTML = analiseHTML;
         document.getElementById("volume").innerHTML = volumeHTML;
+        document.getElementById("sugestao").innerHTML = sugestaoHTML;
 
         localStorage.setItem("analiseHTML", analiseHTML);
         localStorage.setItem("volumeHTML", volumeHTML);
+        localStorage.setItem("sugestaoHTML", sugestaoHTML);
+
       } catch (erro) {
         document.getElementById("analise").innerHTML = "<p>Erro ao buscar dados. Verifique a conexão ou tente novamente.</p>";
         document.getElementById("volume").innerHTML = "";
+        document.getElementById("sugestao").innerHTML = "";
       }
     }
 
     window.onload = () => {
       const analiseSalva = localStorage.getItem("analiseHTML");
       const volumeSalvo = localStorage.getItem("volumeHTML");
+      const sugestaoSalva = localStorage.getItem("sugestaoHTML");
       if (analiseSalva) document.getElementById("analise").innerHTML = analiseSalva;
       if (volumeSalvo) document.getElementById("volume").innerHTML = volumeSalvo;
+      if (sugestaoSalva) document.getElementById("sugestao").innerHTML = sugestaoSalva;
     };
   </script>
 </body>
